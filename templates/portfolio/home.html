@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if profile %}{{ profile.name }}{% else %}Ibrahim Adewale Tijani{% endif %} — Portfolio</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/portfolio.css' %}">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="navbar">
+    <div class="nav-inner">
+        <a href="#hero" class="nav-logo">IT<span class="accent">.</span></a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#certifications">Certs</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="menuBtn" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-bg">
+        <div class="grid-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Available for opportunities
+        </div>
+        <h1 class="hero-name">
+            {% if profile %}{{ profile.name }}{% else %}Ibrahim Adewale Tijani{% endif %}
+        </h1>
+        <p class="hero-title">
+            {% if profile %}{{ profile.title }}{% else %}Senior Data Analyst & Full-Stack Developer{% endif %}
+        </p>
+        <p class="hero-location">📍 {% if profile %}{{ profile.location }}{% else %}Abuja, Nigeria{% endif %}</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-num" data-target="{{ years_experience }}">0</span>+
+                <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num" data-target="{{ projects|length }}">0</span>
+                <span class="stat-label">Projects</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num" data-target="{{ certifications|length }}">0</span>
+                <span class="stat-label">Certifications</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num" data-target="{{ total_skills }}">0</span>
+                <span class="stat-label">Skills</span>
+            </div>
+        </div>
+        <div class="hero-cta">
+            <a href="#projects" class="btn-primary">View My Work</a>
+            <a href="#contact" class="btn-ghost">Get In Touch</a>
+        </div>
+        <div class="hero-socials">
+            {% if profile %}
+                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="social-link">LinkedIn</a>{% endif %}
+                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="social-link">GitHub</a>{% endif %}
+                {% if profile.portfolio_url %}<a href="{{ profile.portfolio_url }}" target="_blank" class="social-link">Portfolio</a>{% endif %}
+                {% if profile.credly_url %}<a href="{{ profile.credly_url }}" target="_blank" class="social-link">Credly</a>{% endif %}
+            {% else %}
+                <a href="https://www.linkedin.com/in/ibrahim-tijani-adewale" target="_blank" class="social-link">LinkedIn</a>
+                <a href="https://github.com/TIJANI0826" target="_blank" class="social-link">GitHub</a>
+                <a href="https://tijani.pythonanywhere.com/" target="_blank" class="social-link">Portfolio</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="section" id="about">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">01 — About</span>
+            <h2 class="section-title">The Story So Far</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="about-lead">
+                    {% if profile %}{{ profile.summary }}{% else %}Results-driven Senior Data Analyst with 7+ years of experience translating complex business and product questions into actionable insights.{% endif %}
+                </p>
+            </div>
+            <div class="about-cards">
+                <div class="info-card">
+                    <div class="info-card-inner">
+                        <span class="info-icon">🗣️</span>
+                        <div>
+                            <h4>Languages</h4>
+                            <div class="lang-tags">
+                                {% for lang in languages %}
+                                    <span class="lang-tag lang-{{ lang.level }}">{{ lang.name }} <em>{{ lang.get_level_display }}</em></span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-inner">
+                        <span class="info-icon">🎓</span>
+                        <div>
+                            {% for edu in educations %}
+                            <h4>{{ edu.degree }}</h4>
+                            <p>{{ edu.institution }}</p>
+                            {% if edu.grade %}<span class="grade-badge">{{ edu.grade }}</span>{% endif %}
+                            {% if not forloop.last %}<hr class="card-divider">{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="achievements-grid">
+            {% for ach in achievements %}
+            <div class="achievement-card" style="--delay: {{ forloop.counter0 }}">
+                <div class="ach-icon">{{ ach.icon }}</div>
+                <div class="ach-metric">{{ ach.metric }}</div>
+                <div class="ach-title">{{ ach.title }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Experience -->
+<section class="section section-dark" id="experience">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">02 — Experience</span>
+            <h2 class="section-title">Work History</h2>
+        </div>
+        <div class="timeline">
+            {% for exp in experiences %}
+            <div class="timeline-item {% if exp.is_current %}current{% endif %}">
+                <div class="timeline-marker">
+                    <div class="marker-dot {% if exp.is_current %}pulse{% endif %}"></div>
+                    <div class="marker-line"></div>
+                </div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <div>
+                            <h3 class="timeline-title">{{ exp.title }}</h3>
+                            <div class="timeline-company">
+                                {% if exp.company_url %}<a href="{{ exp.company_url }}" target="_blank">{{ exp.company }}</a>{% else %}{{ exp.company }}{% endif %}
+                                {% if exp.location %}<span class="timeline-loc">· {{ exp.location }}</span>{% endif %}
+                            </div>
+                        </div>
+                        <span class="timeline-date">{{ exp.duration_str }}</span>
+                    </div>
+                    <ul class="timeline-bullets">
+                        {% for point in exp.bullet_points %}
+                        <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if exp.is_current %}<span class="current-badge">Current Role</span>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Skills -->
+<section class="section" id="skills">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">03 — Skills</span>
+            <h2 class="section-title">Tools & Expertise</h2>
+        </div>
+        <div class="skills-grid">
+            {% for category in skill_categories %}
+            <div class="skill-category-card">
+                <div class="skill-cat-header">
+                    <span class="skill-cat-icon">{{ category.icon }}</span>
+                    <h3>{{ category.name }}</h3>
+                </div>
+                <div class="skill-list">
+                    {% for skill in category.skills.all %}
+                    <div class="skill-item">
+                        <div class="skill-label">
+                            <span>{{ skill.name }}</span>
+                            <span class="skill-level">{{ skill.get_level_display }}</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="{{ skill.level_percent }}"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Projects -->
+<section class="section section-dark" id="projects">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">04 — Projects</span>
+            <h2 class="section-title">Selected Work</h2>
+        </div>
+
+        <!-- Featured -->
+        {% if featured_projects %}
+        <div class="featured-label">Featured Projects</div>
+        <div class="projects-featured">
+            {% for proj in featured_projects %}
+            <div class="project-card featured">
+                <div class="project-number">0{{ forloop.counter }}</div>
+                <h3 class="project-title">{{ proj.title }}</h3>
+                <p class="project-desc">{{ proj.description }}</p>
+                <div class="project-tech">
+                    {% for tech in proj.tech_list %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                <div class="project-links">
+                    {% if proj.project_url %}<a href="{{ proj.project_url }}" target="_blank" class="proj-link">View Project ↗</a>{% endif %}
+                    {% if proj.github_url %}<a href="{{ proj.github_url }}" target="_blank" class="proj-link">GitHub ↗</a>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Other Projects -->
+        <div class="other-projects-label">Other Projects</div>
+        <div class="projects-other">
+            {% for proj in projects %}
+            {% if not proj.is_featured %}
+            <div class="project-card-small">
+                <h4>{{ proj.title }}</h4>
+                <p>{{ proj.description|truncatewords:25 }}</p>
+                <div class="project-tech">
+                    {% for tech in proj.tech_list %}
+                    <span class="tech-tag small">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Certifications -->
+<section class="section" id="certifications">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">05 — Certifications</span>
+            <h2 class="section-title">Credentials & Learning</h2>
+        </div>
+        <div class="certs-grid">
+            {% for cert in certifications %}
+            <div class="cert-card">
+                <div class="cert-issuer">{{ cert.issuer }}</div>
+                <h4 class="cert-name">{{ cert.name }}</h4>
+                <div class="cert-date">{{ cert.date_issued|date:"M Y" }}</div>
+                {% if cert.credential_url %}
+                <a href="{{ cert.credential_url }}" target="_blank" class="cert-link">Verify ↗</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="section section-dark" id="contact">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">06 — Contact</span>
+            <h2 class="section-title">Let's Connect</h2>
+        </div>
+        <div class="contact-layout">
+            <div class="contact-text">
+                <p>I'm open to freelance projects, full-time opportunities, and interesting collaborations. Let's build something impactful together.</p>
+                <div class="contact-details">
+                    {% if profile %}
+                        {% if profile.email %}
+                        <a href="mailto:{{ profile.email }}" class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            {{ profile.email }}
+                        </a>
+                        {% endif %}
+                        {% if profile.phone %}
+                        <a href="tel:{{ profile.phone }}" class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            {{ profile.phone }}
+                        </a>
+                        {% endif %}
+                        {% if profile.location %}
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            {{ profile.location }}
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <a href="mailto:ibrahimtijani08@gmail.com" class="contact-item">
+                        <span class="contact-icon">✉️</span>
+                        ibrahimtijani08@gmail.com
+                    </a>
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        08141994147
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        Abuja, Nigeria
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="contact-socials">
+                    {% if profile %}
+                        {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="social-btn">LinkedIn ↗</a>{% endif %}
+                        {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="social-btn">GitHub ↗</a>{% endif %}
+                        {% if profile.credly_url %}<a href="{{ profile.credly_url }}" target="_blank" class="social-btn">Credly ↗</a>{% endif %}
+                    {% else %}
+                    <a href="https://www.linkedin.com/in/ibrahim-tijani-adewale" target="_blank" class="social-btn">LinkedIn ↗</a>
+                    <a href="https://github.com/TIJANI0826" target="_blank" class="social-btn">GitHub ↗</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="contact-cta-card">
+                <div class="cta-card-inner">
+                    <h3>Ready to collaborate?</h3>
+                    <p>Whether you have a data challenge, a product to build, or an idea to explore — I'm here for it.</p>
+                    <a href="mailto:{% if profile %}{{ profile.email }}{% else %}ibrahimtijani08@gmail.com{% endif %}" class="btn-primary large">Send a Message</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-inner">
+            <span class="footer-name">{% if profile %}{{ profile.name }}{% else %}Ibrahim Adewale Tijani{% endif %}</span>
+            <span class="footer-copy">Built with Django · © 2025</span>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/portfolio.js' %}"></script>
+</body>
+</html>
