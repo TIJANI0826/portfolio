@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-change-this-in-production-use-env-variable'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['tijani.pythonanywhere.com']
+ALLOWED_HOSTS = ['tijani.pythonanywhere.com','127.0.0.1','localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

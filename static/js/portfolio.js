@@ -4,6 +4,55 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // === DARK MODE / LIGHT MODE ===
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    // Initialize theme
+    const initializeTheme = () => {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        
+        html.setAttribute('data-theme', initialTheme);
+        updateThemeToggleLabel(initialTheme);
+    };
+    
+    const updateThemeToggleLabel = (theme) => {
+        const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+        if (themeToggle) themeToggle.setAttribute('title', label);
+    };
+    
+    const toggleTheme = () => {
+        const currentTheme = html.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeToggleLabel(newTheme);
+    };
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+        themeToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleTheme();
+            }
+        });
+    }
+    
+    initializeTheme();
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            const newTheme = e.matches ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            updateThemeToggleLabel(newTheme);
+        }
+    });
+
     // === NAV SCROLL ===
     const navbar = document.getElementById('navbar');
     const handleNavScroll = () => {
@@ -16,14 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelector('.nav-links');
     if (menuBtn) {
         menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
+            const isOpen = navLinks.classList.toggle('open');
             menuBtn.classList.toggle('active');
+            menuBtn.setAttribute('aria-expanded', isOpen);
         });
+        
+        // Close menu on link click
         navLinks.querySelectorAll('a').forEach(a => {
             a.addEventListener('click', () => {
                 navLinks.classList.remove('open');
                 menuBtn.classList.remove('active');
+                menuBtn.setAttribute('aria-expanded', false);
             });
+        });
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                menuBtn.classList.remove('active');
+                menuBtn.setAttribute('aria-expanded', false);
+                menuBtn.focus();
+            }
         });
     }
 
